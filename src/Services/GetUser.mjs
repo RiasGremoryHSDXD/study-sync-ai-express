@@ -1,6 +1,6 @@
-const { supabase } = require('../supabaseClient.cjs')
+import { supabase } from "../supabaseClient.mjs"
 
-async function getUser() {
+export async function getUser() {
   const { data, error } = await supabase.rpc('user_function')
 
   if (error) {
@@ -11,4 +11,3 @@ async function getUser() {
   return data
 }
 
-module.exports = { getUser }
