@@ -1,6 +1,7 @@
 import express, { response } from 'express'
 import { getUser } from '../services/GetUser.mjs'
 import { addUSer } from '../services/addUser.mjs'
+import { logInUser } from '../services/loginUser.mjs'
 
 const app = express()
 
@@ -35,6 +36,24 @@ app.post('/api/addUser', async(req, res) => {
         res.status(201).send({message: 'User created successfully', user})
     }catch(error){
         res.status(500).send({error: error.message})
+    }
+})
+
+app.post('/api/login', async (req, res) => {
+
+    const {email, password} = req.body
+
+    if(!email || !password) return res.status(400).send({error: "Email and password are required"})
+    
+    try {
+        
+        const session = await logInUser(email, password)
+        res.status(200).send({
+            message: 'Login successfully',
+            session
+        })
+    } catch (error) {
+        res.status(401).send({error: error.message})
     }
 })
 
