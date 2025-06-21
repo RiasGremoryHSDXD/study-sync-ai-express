@@ -25,14 +25,21 @@ app.get('/api/enrollments', async (resquest, response) => {
 })
 
 app.post('/api/addUser', async(req, res) => {
-    const { email, password} = req.body
+    const {email, password, full_name, role} = req.body
+
+    console.log("9_TAILS")
+    console.log(email)
+    console.log(password)
+    console.log(full_name)
+    console.log(role)
+    console.log("8_TAILS")
 
     if(!email || !password){
         return res.status(400).send({error: 'Email and password are required'})
     }
 
     try{
-        const user = await addUSer(email, password)
+        const user = await addUSer(email, password, full_name, role)
         res.status(201).send({message: 'User created successfully', user})
     }catch(error){
         res.status(500).send({error: error.message})
@@ -41,13 +48,20 @@ app.post('/api/addUser', async(req, res) => {
 
 app.post('/api/login', async (req, res) => {
 
-    const {email, password} = req.body
+    const {email, password, full_name, role} = req.body
+
+    console.log("NARUTO")
+    console.log(email)
+    console.log(password)
+    console.log(full_name)
+    console.log(role)
+    console.log("UZUMAKI")
 
     if(!email || !password) return res.status(400).send({error: "Email and password are required"})
     
     try {
         
-        const session = await logInUser(email, password)
+        const session = await logInUser(email, password, full_name, role)
         res.status(200).send({
             message: 'Login successfully',
             session
