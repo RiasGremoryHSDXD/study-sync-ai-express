@@ -1,11 +1,35 @@
-import { supabase } from "./supabaseClient.mjs";
+import 'dotenv/config'
+import { createClient } from "@supabase/supabase-js";
+
+const URL = process.env.SUPABASE_URL
+const KEY = process.env.SUPABASE_KEY
 
 export async function logInUser(email, password) {
+
+    const supabase = createClient(URL, KEY)
     const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
     })
     
     if(error) throw new Error(error.message)
-    return data
+    // console.log(data.session.access_token)
+    const { session } = data
+    if (!session) throw new Error('No session returned from signIn');
+
+    const token = session.access_token
+    
+    console.log(token)
+    const supabaseUser = createClient(URL, KEY, {
+        global: { headers: { Authorization: `Bearer ${token}` } }
+    })
+
+    const { data: profile, error: profileError} = await supabaseUser
+    .from('profiles')
+    .select('full_name, role')
+    .single()
+
+    if(profileError) throw new Error(`Failed fetching profile: ${profileError.message}`)
+
+    return {session, profile}
 }
