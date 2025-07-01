@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import { supabase, getAuthenticatedClient } from './supabaseClient.mjs';
 import { createClient } from "@supabase/supabase-js";
 
 const URL = process.env.SUPABASE_URL
@@ -6,7 +7,6 @@ const KEY = process.env.SUPABASE_KEY
 
 export async function logInUser(email, password) {
 
-    const supabase = createClient(URL, KEY)
     const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
@@ -19,10 +19,7 @@ export async function logInUser(email, password) {
 
     const token = session.access_token
     
-    console.log(token)
-    const supabaseUser = createClient(URL, KEY, {
-        global: { headers: { Authorization: `Bearer ${token}` } }
-    })
+    const supabaseUser = getAuthenticatedClient(token)
 
     const { data: profile, error: profileError} = await supabaseUser
     .from('profiles')
