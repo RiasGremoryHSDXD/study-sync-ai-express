@@ -2,6 +2,7 @@ import express, { response } from 'express'
 import { getUser } from '../services/GetUser.mjs'
 import { addUSer } from '../services/addUser.mjs'
 import { logInUser } from '../services/loginUser.mjs'
+import { productDetails } from '../services/getProduct.mjs'
 
 const app = express()
 
@@ -11,6 +12,15 @@ app.use(express.json())
 
 app.get('/', (req, res) => {
     res.send('Hello WSSSADA')
+})
+
+app.get('/api/getProduct/', async (req, res) => {
+  try{
+    const product = await productDetails();
+    res.status(200).send(product)
+  }catch(error){
+    res.status(500).send({error: error.message})
+  }
 })
 
 app.get('/api/enrollments', async (resquest, response) => {
