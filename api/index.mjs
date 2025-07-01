@@ -3,9 +3,8 @@ import { getUser } from '../services/GetUser.mjs'
 import { addUSer } from '../services/addUser.mjs'
 import { logInUser } from '../services/loginUser.mjs'
 import { productDetails } from '../services/getProduct.mjs'
-
+import cors from 'cors'
 const app = express()
-const cors = require('cors')
 
 const PORT = process.env.PORT || 3000
 
