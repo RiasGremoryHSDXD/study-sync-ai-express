@@ -86,7 +86,7 @@ app.post('/api/login', async (req, res) => {
       }
     })
   } catch (error) {
-    res.status(401).send({ error: error.message })
+    res.status(200).send({ error: error.message })
   }
 })
 
